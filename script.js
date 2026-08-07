@@ -132,7 +132,7 @@
 
       if (!configured) {
         setStatus(
-          'The form isn’t connected yet — please email info@lakefronttech.example directly.',
+          'The form isn’t connected yet — please email info@lakefronttelecom.com directly.',
           'error'
         );
         return;
@@ -156,7 +156,7 @@
         })
         .catch(function () {
           setStatus(
-            'Something went wrong sending your message. Please email info@lakefronttech.example directly.',
+            'Something went wrong sending your message. Please email info@lakefronttelecom.com directly.',
             'error'
           );
         })
