@@ -33,7 +33,7 @@
   <main id="top">
     <section class="hero">
       <div class="container hero-inner">
-        <div class="hero-copy">
+        <div class="hero-copy reveal">
           <p class="eyebrow">Technology Professional Services</p>
           <h1>Steady, dependable IT expertise for growing businesses</h1>
           <p class="lead">
@@ -45,7 +45,7 @@
             <a class="btn btn-ghost" href="#services">Explore Services</a>
           </div>
         </div>
-        <div class="hero-art" aria-hidden="true">
+        <div class="hero-art reveal" aria-hidden="true">
           <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -58,13 +58,18 @@
               </linearGradient>
             </defs>
             <rect x="0" y="0" width="400" height="320" rx="16" fill="url(#sky)"/>
-            <circle cx="322" cy="66" r="30" fill="#d9973f" opacity="0.9"/>
+
+            <g class="parallax-layer" data-depth="1.5">
+              <circle class="sun" cx="322" cy="66" r="30" fill="#d9973f" opacity="0.9"/>
+            </g>
 
             <!-- distant hazy hills -->
-            <path d="M0 196 C 60 170,120 182,180 165 C 240 150,300 172,400 158 L400 214 L0 214 Z" fill="#a9bd93" opacity="0.55"/>
+            <g class="parallax-layer" data-depth="3">
+              <path d="M0 196 C 60 170,120 182,180 165 C 240 150,300 172,400 158 L400 214 L0 214 Z" fill="#a9bd93" opacity="0.55"/>
+            </g>
 
             <!-- hazy background treeline -->
-            <g fill="#5c8462" opacity="0.7">
+            <g class="parallax-layer" data-depth="5" fill="#5c8462" opacity="0.7">
               <polygon points="20,214 34,214 27,190"/>
               <polygon points="27,204 41,204 34,178"/>
               <polygon points="60,214 76,214 68,186"/>
@@ -80,35 +85,37 @@
             </g>
 
             <!-- foreground pine trees -->
-            <g transform="translate(48,214)">
-              <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
-              <polygon points="-26,0 26,0 0,-40" fill="#254a34"/>
-              <polygon points="-20,-24 20,-24 0,-58" fill="#2c5940"/>
-              <polygon points="-14,-46 14,-46 0,-76" fill="#336a4c"/>
-            </g>
-            <g transform="translate(150,214) scale(0.8)">
-              <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
-              <polygon points="-26,0 26,0 0,-40" fill="#254a34"/>
-              <polygon points="-20,-24 20,-24 0,-58" fill="#2c5940"/>
-              <polygon points="-14,-46 14,-46 0,-76" fill="#336a4c"/>
-            </g>
-            <g transform="translate(216,214) scale(1.05)">
-              <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
-              <polygon points="-26,0 26,0 0,-40" fill="#1f3d2b"/>
-              <polygon points="-20,-24 20,-24 0,-58" fill="#254a34"/>
-              <polygon points="-14,-46 14,-46 0,-76" fill="#2c5940"/>
-            </g>
-            <g transform="translate(365,214) scale(0.85)">
-              <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
-              <polygon points="-26,0 26,0 0,-40" fill="#254a34"/>
-              <polygon points="-20,-24 20,-24 0,-58" fill="#2c5940"/>
-              <polygon points="-14,-46 14,-46 0,-76" fill="#336a4c"/>
+            <g class="parallax-layer" data-depth="9">
+              <g transform="translate(48,214)">
+                <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
+                <polygon points="-26,0 26,0 0,-40" fill="#254a34"/>
+                <polygon points="-20,-24 20,-24 0,-58" fill="#2c5940"/>
+                <polygon points="-14,-46 14,-46 0,-76" fill="#336a4c"/>
+              </g>
+              <g transform="translate(150,214) scale(0.8)">
+                <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
+                <polygon points="-26,0 26,0 0,-40" fill="#254a34"/>
+                <polygon points="-20,-24 20,-24 0,-58" fill="#2c5940"/>
+                <polygon points="-14,-46 14,-46 0,-76" fill="#336a4c"/>
+              </g>
+              <g transform="translate(216,214) scale(1.05)">
+                <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
+                <polygon points="-26,0 26,0 0,-40" fill="#1f3d2b"/>
+                <polygon points="-20,-24 20,-24 0,-58" fill="#254a34"/>
+                <polygon points="-14,-46 14,-46 0,-76" fill="#2c5940"/>
+              </g>
+              <g transform="translate(365,214) scale(0.85)">
+                <rect x="-3" y="-14" width="6" height="14" fill="#3d2b1f"/>
+                <polygon points="-26,0 26,0 0,-40" fill="#254a34"/>
+                <polygon points="-20,-24 20,-24 0,-58" fill="#2c5940"/>
+                <polygon points="-14,-46 14,-46 0,-76" fill="#336a4c"/>
+              </g>
             </g>
 
             <!-- lake -->
             <rect x="0" y="214" width="400" height="106" fill="url(#water)"/>
-            <path d="M0 224 Q 50 214 100 226 T 200 224 T 300 228 T 400 222 L400 320 L0 320 Z" fill="#4d93a0" opacity="0.5"/>
-            <path d="M0 254 Q 60 242 120 254 T 240 252 T 400 258 L400 320 L0 320 Z" fill="#2f6470" opacity="0.5"/>
+            <path class="ripple ripple-1" d="M0 224 Q 50 214 100 226 T 200 224 T 300 228 T 400 222 L400 320 L0 320 Z" fill="#4d93a0" opacity="0.5"/>
+            <path class="ripple ripple-2" d="M0 254 Q 60 242 120 254 T 240 252 T 400 258 L400 320 L0 320 Z" fill="#2f6470" opacity="0.5"/>
           </svg>
         </div>
       </div>
@@ -116,38 +123,38 @@
 
     <section id="services" class="services">
       <div class="container">
-        <p class="eyebrow center">What We Do</p>
-        <h2 class="section-title center">Services built around your business</h2>
+        <p class="eyebrow center reveal">What We Do</p>
+        <h2 class="section-title center reveal">Services built around your business</h2>
         <div class="card-grid">
-          <article class="card">
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">🧰</div>
+            <h3>On-Site &amp; Boots-on-the-Ground Support</h3>
+            <p>Hands-on, in-person support when remote troubleshooting isn't enough — we show up and get it fixed.</p>
+          </article>
+          <article class="card reveal">
             <div class="card-icon" aria-hidden="true">🖥️</div>
-            <h3>Managed IT Support</h3>
-            <p>Proactive monitoring, helpdesk support, and maintenance so your team stays productive and your systems stay reliable.</p>
+            <h3>Desktop Support</h3>
+            <p>Day-to-day troubleshooting, setup, and maintenance for your team's workstations and devices.</p>
           </article>
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">☁️</div>
-            <h3>Cloud &amp; Infrastructure</h3>
-            <p>Cloud migrations, network design, and infrastructure upgrades planned around your budget and growth trajectory.</p>
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">☎️</div>
+            <h3>VoIP Install, Support &amp; Upgrades (3CX)</h3>
+            <p>Installation, configuration, ongoing support, and upgrades for 3CX VoIP phone systems.</p>
           </article>
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🔐</div>
-            <h3>Security &amp; Compliance</h3>
-            <p>Practical security assessments, hardening, and compliance guidance that fit the realities of a small or midsize business.</p>
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">📡</div>
+            <h3>Network Installation (UniFi)</h3>
+            <p>Design and installation of UniFi network hardware — routers, switches, and access points — built for reliable coverage.</p>
           </article>
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🧩</div>
-            <h3>Software Consulting</h3>
-            <p>Advice and hands-on development for internal tools, integrations, and custom software projects.</p>
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">🔌</div>
+            <h3>Structured Cabling</h3>
+            <p>Network cable runs, patching, crimping, jack termination, and labeling for clean, reliable wiring.</p>
           </article>
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">📊</div>
-            <h3>IT Strategy &amp; Planning</h3>
-            <p>Technology roadmaps and budgeting support that align IT decisions with your long-term business goals.</p>
-          </article>
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🛟</div>
-            <h3>Backup &amp; Disaster Recovery</h3>
-            <p>Backup strategy, business continuity planning, and recovery testing so an outage never becomes a crisis.</p>
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">🧹</div>
+            <h3>Cable Management &amp; Wire Cleanup</h3>
+            <p>Untangling and organizing existing cabling for a safer, easier-to-maintain setup.</p>
           </article>
         </div>
       </div>
@@ -155,7 +162,7 @@
 
     <section id="about" class="about">
       <div class="container about-inner">
-        <div class="about-copy">
+        <div class="about-copy reveal">
           <p class="eyebrow">About Lakefront</p>
           <h2 class="section-title">Local roots, professional-grade technology services</h2>
           <p>
@@ -169,27 +176,27 @@
           </p>
         </div>
         <ul class="stat-list">
-          <li><span class="stat-number">10+</span><span class="stat-label">Years of combined experience</span></li>
-          <li><span class="stat-number">24/7</span><span class="stat-label">Support availability</span></li>
-          <li><span class="stat-number">100%</span><span class="stat-label">Client-first approach</span></li>
+          <li class="reveal"><span class="stat-number" data-count="10" data-suffix="+">10+</span><span class="stat-label">Years of combined experience</span></li>
+          <li class="reveal"><span class="stat-number">24/7</span><span class="stat-label">Support availability</span></li>
+          <li class="reveal"><span class="stat-number" data-count="100" data-suffix="%">100%</span><span class="stat-label">Client-first approach</span></li>
         </ul>
       </div>
     </section>
 
     <section id="why-us" class="why-us">
       <div class="container">
-        <p class="eyebrow center">Why Lakefront</p>
-        <h2 class="section-title center">What sets us apart</h2>
+        <p class="eyebrow center reveal">Why Lakefront</p>
+        <h2 class="section-title center reveal">What sets us apart</h2>
         <div class="why-grid">
-          <div class="why-item">
+          <div class="why-item reveal">
             <h3>Responsive &amp; Reliable</h3>
             <p>Fast response times and clear communication, so you're never left guessing about the status of an issue or project.</p>
           </div>
-          <div class="why-item">
+          <div class="why-item reveal">
             <h3>Right-Sized Solutions</h3>
             <p>We recommend technology that fits your budget and needs today, with room to grow &mdash; not oversized enterprise overhead.</p>
           </div>
-          <div class="why-item">
+          <div class="why-item reveal">
             <h3>Transparent Partnership</h3>
             <p>Straightforward pricing and honest recommendations, so you always understand what you're paying for and why.</p>
           </div>
@@ -199,7 +206,7 @@
 
     <section id="contact" class="contact">
       <div class="container contact-inner">
-        <div class="contact-copy">
+        <div class="contact-copy reveal">
           <p class="eyebrow">Get in Touch</p>
           <h2 class="section-title">Let's talk about your technology needs</h2>
           <p>Reach out for a free initial consultation and learn how Lakefront Technology Professional Services can support your business.</p>
@@ -208,7 +215,7 @@
             <li><strong>Phone:</strong> <a href="tel:+15555550123">(555) 555-0123</a></li>
           </ul>
         </div>
-        <form class="contact-form" action="#" method="post">
+        <form class="contact-form reveal" action="#" method="post">
           <label>
             Name
             <input type="text" name="name" placeholder="Your name" required>
@@ -238,8 +245,6 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
