@@ -1,19 +1,20 @@
 /* Lakefront Technology Professional Services — site styles */
 
 :root {
-  --navy: #0c2f66;
-  --blue: #1d4ed8;
-  --blue-dark: #153f7a;
-  --blue-light: #eff6ff;
-  --sky: #dbeafe;
-  --gold: #f5a524;
-  --text: #1f2937;
-  --text-muted: #55606e;
-  --border: #e2e8f0;
-  --white: #ffffff;
+  --navy: #1f3d2e;
+  --blue: #2f6690;
+  --blue-dark: #234f70;
+  --blue-light: #eef1e0;
+  --sky: #f7eeda;
+  --gold: #c9873c;
+  --text: #2b2a22;
+  --text-muted: #5c5646;
+  --border: #ddd3bb;
+  --white: #fbf8f2;
   --radius: 12px;
-  --shadow: 0 10px 30px rgba(12, 47, 102, 0.08);
+  --shadow: 0 10px 30px rgba(31, 45, 31, 0.14);
   --max-width: 1140px;
+  --font-heading: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
 }
 
 * {
@@ -35,6 +36,11 @@ body {
 img, svg {
   max-width: 100%;
   display: block;
+}
+
+h1, h2, h3, .brand-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
 }
 
 a {
@@ -78,7 +84,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(251, 248, 242, 0.92);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--border);
 }
@@ -147,7 +153,7 @@ a {
 .btn-primary {
   background: var(--blue);
   color: var(--white);
-  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.25);
+  box-shadow: 0 6px 16px rgba(47, 102, 144, 0.28);
 }
 
 .btn-primary:hover {
@@ -354,7 +360,7 @@ a {
 }
 
 .contact-copy p {
-  color: #cbd5e1;
+  color: #d7dcc6;
   max-width: 46ch;
 }
 
@@ -383,7 +389,7 @@ a {
   display: grid;
   gap: 6px;
   font-size: 0.9rem;
-  color: #e2e8f0;
+  color: #ece6d5;
 }
 
 .contact-form input,
@@ -398,7 +404,7 @@ a {
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-  color: #94a3b8;
+  color: #b7ae98;
 }
 
 .contact-form input:focus,
@@ -410,8 +416,8 @@ a {
 /* Footer */
 
 .site-footer {
-  background: #081d40;
-  color: #94a3b8;
+  background: #14261c;
+  color: #a9a290;
   padding: 24px 0;
   font-size: 0.9rem;
 }
