@@ -112,7 +112,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 16px;
   padding-top: 12px;
   padding-bottom: 12px;
@@ -121,7 +121,9 @@ a {
 .emergency-copy {
   display: flex;
   align-items: center;
+  flex: 1 1 auto;
   flex-wrap: wrap;
+  min-width: 0;
   gap: 12px;
   margin: 0;
   font-size: 0.95rem;
@@ -154,6 +156,17 @@ a {
 
 .emergency-text strong {
   color: #fff;
+}
+
+.emergency-note {
+  color: rgba(253, 236, 235, 0.72);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.emergency-note::before {
+  content: "\00b7";
+  margin: 0 8px;
 }
 
 @keyframes emergency-pulse {
