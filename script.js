@@ -89,6 +89,84 @@
     }
   }
 
+  var form = document.getElementById('contact-form');
+  if (form) {
+    var status = document.getElementById('form-status');
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var config = window.LAKEFRONT_EMAIL_CONFIG || {};
+    var configured =
+      window.emailjs &&
+      config.publicKey &&
+      config.publicKey.indexOf('YOUR_') !== 0 &&
+      config.serviceId &&
+      config.templateId;
+
+    if (configured) {
+      emailjs.init({ publicKey: config.publicKey });
+    }
+
+    function setStatus(message, kind) {
+      status.textContent = message;
+      status.className = 'form-status' + (kind ? ' is-' + kind : '');
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (form.company_website.value) {
+        return;
+      }
+
+      var name = form.name.value.trim();
+      var email = form.email.value.trim();
+      var message = form.message.value.trim();
+
+      if (!name || !email || !message) {
+        setStatus('Please fill in your name, email, and message.', 'error');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setStatus('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      if (!configured) {
+        setStatus(
+          'The form isn’t connected yet — please email info@lakefronttech.example directly.',
+          'error'
+        );
+        return;
+      }
+
+      submitBtn.disabled = true;
+      var originalLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Sending…';
+      setStatus('');
+
+      emailjs
+        .send(config.serviceId, config.templateId, {
+          name: name,
+          email: email,
+          phone: form.phone.value.trim() || 'Not provided',
+          message: message
+        })
+        .then(function () {
+          form.reset();
+          setStatus('Thanks! Your message is on its way — we’ll be in touch shortly.', 'success');
+        })
+        .catch(function () {
+          setStatus(
+            'Something went wrong sending your message. Please email info@lakefronttech.example directly.',
+            'error'
+          );
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        });
+    });
+  }
+
   var heroArt = document.querySelector('.hero-art');
   if (heroArt && !reduceMotion && window.matchMedia('(hover: hover)').matches) {
     var layers = heroArt.querySelectorAll('[data-depth]');

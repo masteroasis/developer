@@ -498,6 +498,38 @@ a {
   outline-offset: 1px;
 }
 
+.contact-form .optional {
+  color: #b7ae98;
+  font-weight: 400;
+}
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  margin: 0;
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.form-status.is-success {
+  color: #a8d5a2;
+}
+
+.form-status.is-error {
+  color: #f0b4a0;
+}
+
+.contact-form button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* Footer */
 
 .site-footer {
