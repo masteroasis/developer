@@ -9,6 +9,7 @@ This repository has no build tooling, package manifest, test suite, or framework
 - `index.html` / `styles.css` — the Lakefront Technology Professional Services marketing site: a single-page layout with header/nav, hero, services grid, about, "why us", contact form, and footer. All styling lives in `styles.css` (no CSS framework, no build step); the only inline JS is a one-line footer year updater.
 - `hello_world.txt` — a leftover plain-text note (`#Odin Project`) from this repo's original Odin Project coursework origin.
 - `webpage.html` — an earlier standalone HTML fragment (no `<!DOCTYPE>`/`<html>`/`<head>` wrapper), unrelated to the Lakefront site; not linked from `index.html`.
+- `.github/workflows/deploy.yml` — deploys the site to Cloudflare Pages via `cloudflare/pages-action`, using Direct Upload (no build step, `directory: .`). Runs on push to `main` (production deploy) and on pull requests targeting `main` (preview deploy). Requires two repo secrets that are not stored in this repo: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, plus a Cloudflare Pages project named `lakefront-technology` (update `projectName` in the workflow if the actual project is named differently).
 
 There is no README, no `package.json`/`Makefile`/other build config, and no `.cursorrules` or Copilot instructions to incorporate.
 
@@ -18,5 +19,6 @@ There is no README, no `package.json`/`Makefile`/other build config, and no `.cu
 - Keep `index.html` and `styles.css` as plain, dependency-free HTML/CSS unless the user asks for a framework or build step — nothing in the repo currently requires one.
 - The color palette and section conventions (eyebrow label, section title, card grid) are defined at the top of `styles.css` under `:root` and are reused across all sections — extend via those existing classes/variables rather than introducing new one-off styles.
 - Since there's no other existing architecture to follow, infer intent from the user's request rather than assuming a particular framework or structure. Ask before introducing tooling (e.g., a package manager or bundler) that isn't already present.
+- Deployment is handled by the Cloudflare Pages workflow above, not by any local build/publish command.
 
 Update this file as the repository grows real structure (source directories, a package manifest, tests, etc.) so future guidance stays accurate.
