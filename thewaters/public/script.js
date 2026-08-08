@@ -2,6 +2,7 @@
   'use strict';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CFG = window.SITE_CONFIG || {};
 
   /* ---------------------------------------------------------------- basics */
 
@@ -34,6 +35,57 @@
     });
   }
 
+  /* ---------------------------------------------------------------- reveal */
+  /* Set up first so content rendered later (events arrive async) can register. */
+
+  var revealObserver = null;
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    revealObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+  }
+
+  function registerReveals(root) {
+    var els = (root || document).querySelectorAll('.reveal');
+    els.forEach(function (el) {
+      if (revealObserver) revealObserver.observe(el);
+      else el.classList.add('is-visible');
+    });
+  }
+
+  /* -------------------------------------------------------------- helpers */
+
+  function fill(root, selector, text) {
+    var el = root.querySelector(selector);
+    if (!el) return null;
+    if (text) {
+      el.textContent = text;
+      return el;
+    }
+    el.remove();
+    return null;
+  }
+
+  function drop(root, selector) {
+    var el = root.querySelector(selector);
+    if (el) el.remove();
+  }
+
+  // Only http(s) links. Blocks javascript: and data: URLs from sneaking in
+  // through a spreadsheet a volunteer edits.
+  function safeUrl(value) {
+    var s = String(value || '').trim();
+    return /^https?:\/\//i.test(s) ? s : '';
+  }
+
   /* -------------------------------------------------------------- bulletin */
 
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -48,19 +100,53 @@
     return isNaN(d.getTime()) ? null : d;
   }
 
-  function fill(root, selector, text) {
-    var el = root.querySelector(selector);
-    if (!el) return null;
-    if (text) {
-      el.textContent = text;
-    } else {
-      el.remove();
-      return null;
+  // Minimal RFC4180 CSV reader — handles quoted fields containing commas,
+  // newlines, and doubled quotes, which Google Sheets emits freely.
+  function parseCSV(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+    var src = String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    for (var i = 0; i < src.length; i++) {
+      var c = src.charAt(i);
+      if (inQuotes) {
+        if (c === '"') {
+          if (src.charAt(i + 1) === '"') { field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += c;
+        }
+      } else if (c === '"') {
+        inQuotes = true;
+      } else if (c === ',') {
+        row.push(field); field = '';
+      } else if (c === '\n') {
+        row.push(field); rows.push(row); row = []; field = '';
+      } else {
+        field += c;
+      }
     }
-    return el;
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows;
   }
 
-  function renderEvents() {
+  function csvToEvents(text) {
+    var rows = parseCSV(text).filter(function (r) {
+      return r.some(function (cell) { return String(cell).trim() !== ''; });
+    });
+    if (rows.length < 2) return [];
+
+    var head = rows[0].map(function (h) { return String(h).trim().toLowerCase(); });
+    return rows.slice(1).map(function (r) {
+      var obj = {};
+      head.forEach(function (key, i) { obj[key] = String(r[i] || '').trim(); });
+      return obj;
+    });
+  }
+
+  function renderEvents(data) {
     var list = document.getElementById('events-list');
     var tpl = document.getElementById('event-template');
     if (!list || !tpl) return;
@@ -68,13 +154,11 @@
     var today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    var upcoming = (window.SITE_EVENTS || [])
-      .map(function (ev) {
-        return { data: ev, when: parseDate(ev.date) };
-      })
+    var upcoming = (data || [])
+      .map(function (ev) { return { data: ev, when: parseDate(ev.date) }; })
       .filter(function (item) {
-        // An unparseable date is a typo in events.js — show it rather than
-        // silently swallowing it, so the mistake is visible.
+        // An unparseable date means a typo in the source — show it rather than
+        // silently swallowing it, so the mistake is visible to whoever typed it.
         return !item.when || item.when >= today;
       })
       .sort(function (a, b) {
@@ -82,6 +166,8 @@
         if (!b.when) return -1;
         return a.when - b.when;
       });
+
+    list.innerHTML = '';
 
     if (!upcoming.length) {
       list.innerHTML =
@@ -99,8 +185,7 @@
         fill(node, '[data-month]', MONTHS[item.when.getMonth()]);
         fill(node, '[data-day]', String(item.when.getDate()));
       } else {
-        var chip = node.querySelector('.event-date');
-        if (chip) chip.remove();
+        drop(node, '.event-date');
       }
 
       fill(node, '[data-title]', ev.title || 'Untitled event');
@@ -110,60 +195,161 @@
       // Only show the separator dot when there is something on both sides.
       var when = fill(node, '[data-when]', ev.time);
       var where = fill(node, '[data-where]', ev.place);
-      var dot = node.querySelector('.event-dot');
-      if (dot && !(when && where)) dot.remove();
-      if (!when && !where) {
-        var meta = node.querySelector('.event-meta');
-        if (meta) meta.remove();
+      if (!(when && where)) drop(node, '.event-dot');
+      if (!when && !where) drop(node, '.event-meta');
+
+      var rsvpUrl = safeUrl(ev.rsvp);
+      var linkUrl = safeUrl(ev.link);
+
+      var rsvp = node.querySelector('[data-rsvp]');
+      if (rsvp) {
+        if (rsvpUrl) {
+          rsvp.setAttribute('href', rsvpUrl);
+          rsvp.setAttribute('rel', 'noopener');
+          rsvp.setAttribute('aria-label', 'Save my spot for ' + (ev.title || 'this event'));
+        } else {
+          rsvp.remove();
+        }
       }
 
       var link = node.querySelector('[data-link]');
       if (link) {
-        if (ev.link) {
-          link.setAttribute('href', ev.link);
-          link.setAttribute(
-            'aria-label',
-            'Details and signup for ' + (ev.title || 'this event')
-          );
+        if (linkUrl) {
+          link.setAttribute('href', linkUrl);
+          link.setAttribute('rel', 'noopener');
+          link.setAttribute('aria-label', 'Details for ' + (ev.title || 'this event'));
         } else {
           link.remove();
         }
+      }
+
+      if (!rsvpUrl && !linkUrl) drop(node, '.event-actions');
+
+      frag.appendChild(node);
+    });
+
+    list.appendChild(frag);
+    registerReveals(list);
+  }
+
+  function loadEvents() {
+    var src = String(CFG.eventsSource || 'local').trim();
+    var local = window.SITE_EVENTS || [];
+
+    if (!/^https?:\/\//i.test(src)) {
+      renderEvents(local);
+      return;
+    }
+
+    fetch(src, { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        var rows = /^\s*[[{]/.test(text) ? JSON.parse(text) : csvToEvents(text);
+        if (!rows.length) throw new Error('source returned no rows');
+        renderEvents(rows);
+      })
+      .catch(function (err) {
+        // Never leave the bulletin empty because a spreadsheet moved.
+        console.warn('[bulletin] remote source failed, falling back to events.js:', err);
+        renderEvents(local);
+      });
+  }
+
+  loadEvents();
+
+  /* --------------------------------------------------------------- gather */
+
+  function wireGather() {
+    var pairs = [
+      ['[data-volunteer-link]', CFG.volunteerUrl],
+      ['[data-booking-link]', CFG.bookingUrl]
+    ];
+    var shown = 0;
+
+    pairs.forEach(function (pair) {
+      var el = document.querySelector(pair[0]);
+      if (!el) return;
+      var url = safeUrl(pair[1]);
+      if (url) {
+        el.setAttribute('href', url);
+        el.setAttribute('rel', 'noopener');
+        el.removeAttribute('hidden');
+        shown++;
+      } else {
+        el.remove();
+      }
+    });
+
+    var stub = document.querySelector('[data-gather-stub]');
+    if (stub && shown) stub.remove();
+
+    // An empty flex row still carries its margin, leaving a phantom gap.
+    // :empty won't catch it because of the whitespace between the tags.
+    if (!shown) {
+      var cta = document.querySelector('.section-cta');
+      if (cta) cta.remove();
+    }
+  }
+
+  wireGather();
+
+  /* -------------------------------------------------------------- support */
+
+  function renderSupport() {
+    var list = document.getElementById('support-list');
+    var tpl = document.getElementById('support-template');
+    var stub = document.querySelector('[data-support-stub]');
+    if (!list || !tpl) return;
+
+    var items = (CFG.support && CFG.support.items) || [];
+    if (!items.length) {
+      list.remove();
+      return;
+    }
+
+    var frag = document.createDocumentFragment();
+    var live = 0;
+
+    items.forEach(function (item) {
+      var node = tpl.content.cloneNode(true);
+      fill(node, '[data-price]', item.price);
+      fill(node, '[data-name]', item.name || 'Item');
+      fill(node, '[data-desc]', item.description);
+
+      var url = safeUrl(item.url);
+      var btn = node.querySelector('[data-buy]');
+      var soon = node.querySelector('[data-soon]');
+
+      if (url && btn) {
+        btn.setAttribute('href', url);
+        btn.setAttribute('rel', 'noopener');
+        btn.textContent = item.cta || 'Buy';
+        btn.setAttribute('aria-label', (item.cta || 'Buy') + ' — ' + (item.name || 'item'));
+        if (soon) soon.remove();
+        live++;
+      } else {
+        if (btn) btn.remove();
       }
 
       frag.appendChild(node);
     });
 
     list.appendChild(frag);
+    registerReveals(list);
+
+    // The warning only earns its place while nothing can actually be bought.
+    if (stub && live === items.length) stub.remove();
   }
 
-  renderEvents();
+  renderSupport();
 
-  /* ---------------------------------------------------------------- reveal */
-  /* Runs after renderEvents so the event cards are observed too. */
+  /* Anything still in the static markup. */
+  registerReveals(document);
 
-  var revealEls = document.querySelectorAll('.reveal');
-  if (reduceMotion || !('IntersectionObserver' in window)) {
-    revealEls.forEach(function (el) {
-      el.classList.add('is-visible');
-    });
-  } else {
-    var revealObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-    revealEls.forEach(function (el) {
-      revealObserver.observe(el);
-    });
-  }
-
-  /* ------------------------------------------------------------ bubble field */
+  /* --------------------------------------------------------- bubble field */
   /* Bubbles drift up on their own and get a shove from the scroll wheel:
      scrolling down pushes them up faster, scrolling up slows them. */
 
@@ -324,14 +510,14 @@
 
   function validate(form) {
     var checks = [
-      { id: 'name', test: function (v) { return v.length > 1; },
-        message: 'Please enter your name.' },
-      { id: 'email', test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); },
-        message: 'Please enter a valid email address.' },
+      { id: 'name', message: 'Please enter your name.',
+        test: function (v) { return v.length > 1; } },
+      { id: 'email', message: 'Please enter a valid email address.',
+        test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); } },
       // Deliberately loose: 7+ digits. Real people type (555) 555-0100,
       // +1 555 555 0100, and 555.555.0100, and all of them are correct.
-      { id: 'phone', test: function (v) { return (v.match(/\d/g) || []).length >= 7; },
-        message: 'Please enter a phone number we can reach you on.' }
+      { id: 'phone', message: 'Please enter a phone number we can reach you on.',
+        test: function (v) { return (v.match(/\d/g) || []).length >= 7; } }
     ];
 
     var firstBad = null;
@@ -339,8 +525,7 @@
     checks.forEach(function (check) {
       var input = form.querySelector('#' + check.id);
       if (!input) return;
-      var value = input.value.trim();
-      if (check.test(value)) {
+      if (check.test(input.value.trim())) {
         clearError(input);
       } else {
         showError(input, check.message);
@@ -358,29 +543,48 @@
   var form = document.querySelector('form[name="contact"]');
   if (form) {
     var status = form.querySelector('[data-form-status]');
+    var submitBtn = form.querySelector('button[type="submit"]');
+
+    var say = function (text) {
+      if (status) status.textContent = text;
+    };
 
     form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
       var honeypot = form.querySelector('#company');
-      if (honeypot && honeypot.value) {
-        e.preventDefault();
-        return; // Bot. Fail silently.
-      }
+      if (honeypot && honeypot.value) return; // Bot. Fail silently.
 
       if (!validate(form)) {
-        e.preventDefault();
-        if (status) status.textContent = '';
+        say('');
         return;
       }
 
-      // No backend yet. Block the submit rather than let it look like it sent.
-      // Remove data-form-unwired from the <form> tag once one is connected.
-      if (form.hasAttribute('data-form-unwired')) {
-        e.preventDefault();
-        if (status) {
-          status.textContent =
-            'This form is not connected yet — please email hello@thewaters.life in the meantime.';
-        }
+      var endpoint = safeUrl(CFG.contactEndpoint);
+      if (!endpoint) {
+        say('This form is not connected yet — please email hello@thewaters.life in the meantime.');
+        return;
       }
+
+      if (submitBtn) submitBtn.disabled = true;
+      say('Sending…');
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          form.reset();
+          say('Thank you — we have your details and someone will be in touch soon.');
+        })
+        .catch(function () {
+          say('Something went wrong sending that. Please email hello@thewaters.life instead.');
+        })
+        .then(function () {
+          if (submitBtn) submitBtn.disabled = false;
+        });
     });
 
     form.addEventListener('input', function (e) {

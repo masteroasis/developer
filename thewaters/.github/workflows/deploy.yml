@@ -25,10 +25,10 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Replace CHANGE-ME with the Cloudflare Pages project name.
+          # Must match the Cloudflare Pages project name exactly.
           # Pushes to main become the production deploy; pull requests get
           # their own preview URL, named after the source branch.
           command: >-
             pages deploy public
-            --project-name=CHANGE-ME
+            --project-name=thewaters
             --branch=${{ github.head_ref || github.ref_name }}

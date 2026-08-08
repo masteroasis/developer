@@ -109,7 +109,10 @@
                 <span data-where></span>
               </p>
               <p class="event-desc" data-desc></p>
-              <a class="event-link" data-link>Details &amp; signup <span aria-hidden="true">&rarr;</span></a>
+              <div class="event-actions">
+                <a class="btn btn-small" data-rsvp>Save my spot</a>
+                <a class="event-link" data-link>Details <span aria-hidden="true">&rarr;</span></a>
+              </div>
             </div>
           </article>
         </template>
@@ -175,10 +178,16 @@
           </article>
         </div>
 
-        <p class="stub-note reveal" role="note">
-          <strong>Not connected yet.</strong> Which tool sits behind these depends on
-          answers I don't have — see <code>README.md</code> under &ldquo;Decisions still
-          open.&rdquo; The layout is ready for whatever we pick.
+        <div class="section-cta reveal">
+          <a class="btn" data-volunteer-link hidden>Sign up to bring or serve</a>
+          <a class="btn btn-ghost" data-booking-link hidden>Book time with a leader</a>
+        </div>
+
+        <p class="stub-note reveal" data-gather-stub role="note">
+          <strong>Signups aren't connected yet.</strong> Add a
+          <code>volunteerUrl</code> and <code>bookingUrl</code> in
+          <code>config.js</code> and buttons appear here. Per-event RSVP links go
+          on the event itself, in the bulletin.
         </p>
       </div>
     </section>
@@ -198,21 +207,24 @@
           Retreat fees, study books, and anything else the group sells will run through here.
         </p>
 
-        <div class="grid grid-2">
-          <article class="card reveal">
-            <h3>Registration &amp; fees</h3>
-            <p>Pay for a retreat or study at the same time you sign up, without a separate check to write.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Books &amp; goods</h3>
-            <p>Study guides, shirts, and fundraiser items, shipped or picked up at the next gathering.</p>
-          </article>
-        </div>
+        <!-- Rendered from config.js → support.items -->
+        <div class="grid grid-3" id="support-list"></div>
 
-        <p class="stub-note reveal" role="note">
-          <strong>No payments are being taken.</strong> Nothing here can charge a card
-          until a processor is chosen and connected. Left deliberately inert so it
-          can't look like it works when it doesn't.
+        <template id="support-template">
+          <article class="card support-card reveal">
+            <p class="support-price" data-price></p>
+            <h3 data-name></h3>
+            <p data-desc></p>
+            <a class="btn btn-small support-btn" data-buy></a>
+            <p class="support-soon" data-soon>Coming soon</p>
+          </article>
+        </template>
+
+        <p class="stub-note reveal" data-support-stub role="note">
+          <strong>No payments are being taken.</strong> Each card turns into a working
+          checkout button as soon as its <code>url</code> is filled in inside
+          <code>config.js</code> — a Stripe Payment Link, or the church's own giving
+          page. Left inert until then so it can't look like it works when it doesn't.
         </p>
       </div>
     </section>
@@ -295,6 +307,7 @@
     </div>
   </footer>
 
+  <script src="config.js"></script>
   <script src="events.js"></script>
   <script src="script.js"></script>
 </body>

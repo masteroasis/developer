@@ -12,7 +12,8 @@
    time   — free text, shown exactly as you type it. Optional.
    place  — free text. Optional.
    tag    — the small label above the title. Optional.
-   link   — a signup or details URL. Leave as "" to hide the link entirely.
+   link   — a "Details" URL. Leave as "" to hide the link entirely.
+   rsvp   — a signup URL. Shows a "Save my spot" button. Leave "" to hide it.
    =========================================================================== */
 
 window.SITE_EVENTS = [
@@ -24,7 +25,8 @@ window.SITE_EVENTS = [
     tag: 'Weekly',
     description:
       'We are working our way slowly through the Psalms. Come late, leave early, bring coffee — no preparation expected.',
-    link: ''
+    link: '',
+    rsvp: ''
   },
   {
     title: 'Fall Retreat — Still Waters',
@@ -34,7 +36,8 @@ window.SITE_EVENTS = [
     tag: 'Retreat',
     description:
       'Two nights away for rest, teaching, and long unhurried conversation. Registration opens in September; scholarships are available and nobody is turned away.',
-    link: ''
+    link: '',
+    rsvp: ''
   },
   {
     title: 'Soup & Bread Supper',
@@ -44,7 +47,8 @@ window.SITE_EVENTS = [
     tag: 'Gathering',
     description:
       'A simple shared meal. Bring a pot of something or bring nothing at all — there is always more than enough.',
-    link: ''
+    link: '',
+    rsvp: ''
   },
   {
     title: 'Advent Morning',
@@ -54,6 +58,7 @@ window.SITE_EVENTS = [
     tag: 'Seasonal',
     description:
       'Wreath-making, a short teaching, and a quiet start to a loud season. Childcare provided.',
-    link: ''
+    link: '',
+    rsvp: ''
   }
 ];
