@@ -215,7 +215,7 @@
             <li><strong>Phone:</strong> <a href="tel:+14143007997">(414) 300-7997</a></li>
           </ul>
         </div>
-        <form class="contact-form reveal" action="#" method="post">
+        <form id="contact-form" class="contact-form reveal" novalidate>
           <label>
             Name
             <input type="text" name="name" placeholder="Your name" required>
@@ -225,10 +225,20 @@
             <input type="email" name="email" placeholder="you@company.com" required>
           </label>
           <label>
-            How can we help?
-            <textarea name="message" rows="4" placeholder="Tell us a bit about your project or IT needs"></textarea>
+            Phone <span class="optional">(optional)</span>
+            <input type="tel" name="phone" placeholder="(555) 555-1234">
           </label>
+          <label>
+            How can we help?
+            <textarea name="message" rows="4" placeholder="Tell us a bit about your project or IT needs" required></textarea>
+          </label>
+          <div class="hp-field" aria-hidden="true">
+            <label>Leave this field empty
+              <input type="text" name="company_website" tabindex="-1" autocomplete="off">
+            </label>
+          </div>
           <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
     </section>
@@ -245,6 +255,8 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="email-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
