@@ -10,6 +10,7 @@ This repository has no build tooling, package manifest, test suite, or framework
 - `hello_world.txt` — a leftover plain-text note (`#Odin Project`) from this repo's original Odin Project coursework origin.
 - `webpage.html` — an earlier standalone HTML fragment (no `<!DOCTYPE>`/`<html>`/`<head>` wrapper), unrelated to the Lakefront site; not linked from `index.html`.
 - `.github/workflows/deploy.yml` — deploys the site to Cloudflare Pages via `cloudflare/pages-action`, using Direct Upload (no build step, `directory: .`). Runs on push to `main` (production deploy) and on pull requests targeting `main` (preview deploy). Requires two repo secrets that are not stored in this repo: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, plus a Cloudflare Pages project named `lakefront-technology` (update `projectName` in the workflow if the actual project is named differently).
+This repo holds **only** the Lakefront Technology site. A second project (The Waters, `thewaters.life`) was briefly developed here in a `thewaters/` subdirectory and has since moved to its own repository, `masteroasis/thewaters` — do not re-add it here. The root `deploy.yml` publishes `directory: .`, so anything added at this level ships to the Lakefront Pages project and becomes reachable under Lakefront's domain; keep unrelated projects out of this repo for that reason.
 
 There is no README, no `package.json`/`Makefile`/other build config, and no `.cursorrules` or Copilot instructions to incorporate.
 
