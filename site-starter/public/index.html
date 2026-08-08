@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Name — Tagline goes here</title>
+  <meta name="description" content="One or two sentences describing the business. This is what shows up under the link in Google results, so make it read like a sentence, not a keyword list." />
+
+  <link rel="canonical" href="https://clientdomain.com/" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://clientdomain.com/" />
+  <meta property="og:title" content="Client Name — Tagline goes here" />
+  <meta property="og:description" content="One or two sentences describing the business." />
+  <meta property="og:image" content="https://clientdomain.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">Client Name</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn-small" href="#contact">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Serving Your Area Since 20XX</p>
+          <h1>A clear headline about what the business does for its customers.</h1>
+          <p class="lede">
+            A short supporting paragraph. Say who this is for and what problem it solves,
+            in plain language. Two or three lines is plenty.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#contact">Request a quote</a>
+            <a class="btn btn-ghost" href="#services">See what we do</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-art-shape"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="container">
+        <p class="eyebrow center">What We Do</p>
+        <h2 class="section-title">Services</h2>
+        <p class="section-intro">
+          Replace these three cards with the real offerings. Keep them parallel in
+          length and specific enough that a visitor knows whether to call.
+        </p>
+
+        <div class="grid grid-3">
+          <article class="card reveal">
+            <h3>First service</h3>
+            <p>Describe the service in two or three sentences. Focus on the outcome the customer gets, not the process.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Second service</h3>
+            <p>Describe the service in two or three sentences. Focus on the outcome the customer gets, not the process.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Third service</h3>
+            <p>Describe the service in two or three sentences. Focus on the outcome the customer gets, not the process.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="about">
+      <div class="container about-inner">
+        <div class="reveal">
+          <p class="eyebrow">About Us</p>
+          <h2 class="section-title left">A short section about the people behind the business.</h2>
+          <p>
+            Customers hire people, not websites. A couple of paragraphs about history,
+            values, and who they'll actually be talking to does more work here than
+            anything else on the page.
+          </p>
+          <p>
+            Mention the service area, how long they've been operating, and anything
+            that makes them the obvious local choice.
+          </p>
+        </div>
+        <ul class="checklist reveal">
+          <li>Licensed and insured</li>
+          <li>Free written estimates</li>
+          <li>Locally owned and operated</li>
+          <li>Work backed by a written warranty</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <p class="eyebrow center">Get In Touch</p>
+        <h2 class="section-title">Contact</h2>
+        <p class="section-intro">
+          Replace the details below, and read the form note in the README before
+          launch — this form does not submit anywhere yet.
+        </p>
+
+        <div class="contact-inner">
+          <ul class="contact-details reveal">
+            <li>
+              <span class="contact-label">Phone</span>
+              <a href="tel:+15555550100">(555) 555-0100</a>
+            </li>
+            <li>
+              <span class="contact-label">Email</span>
+              <a href="mailto:hello@clientdomain.com">hello@clientdomain.com</a>
+            </li>
+            <li>
+              <span class="contact-label">Hours</span>
+              <span>Mon–Fri, 8am–5pm</span>
+            </li>
+            <li>
+              <span class="contact-label">Area</span>
+              <span>City, State and surrounding communities</span>
+            </li>
+          </ul>
+
+          <!-- NOTE: no backend yet. See README "Making the contact form work". -->
+          <form class="contact-form reveal" name="contact" method="POST" data-form-unwired>
+            <div class="field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="message">How can we help?</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button class="btn" type="submit">Send message</button>
+            <p class="form-note" role="status" data-form-status></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-brand">Client Name</p>
+      <p class="footer-meta">&copy; <span id="year">2026</span> Client Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
